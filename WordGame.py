@@ -1,15 +1,21 @@
 #Word Game is a knock-off version of a popular online word-guessing game.
-
+#Zane Serhan
+#2/19/2026
+#Lab5 WordGame
 import random
 
 def inWord(letter, word):
     """Returns boolean if letter is anywhere in the given word"""
-
+    for ch in word:
+        if letter == ch:
+            return True
     return False
 
 def inSpot(letter, word, spot):
     """Returns boolean response if letter is in the given spot in the word."""
-
+    correctLetter = word[spot]
+    if letter == correctLetter:
+        return True
     return False
 
 def rateGuess(myGuess, word):
@@ -17,7 +23,18 @@ def rateGuess(myGuess, word):
     - Capital letter if the letter is in the right spot
     - Lower case letter if the letter is in the word but in the wrong spot
     - * if the letter is not in the word at all"""
+    feedback = ""
 
+    for spot in range(5):
+        myLetter = myGuess[spot]
+        if inSpot(myLetter, word, spot):
+            feedback = feedback + myLetter.upper()
+        elif inWord(myLetter, word):
+            feedback = feedback + myLetter
+        else:
+            feedback = feedback + "*"
+
+    return feedback
 
 def main():
     #Pick a random word from the list of all words
@@ -25,13 +42,28 @@ def main():
     content = wordFile.read()
     wordList = content.split("\n")
     todayWord = random.choice(wordList)
-    print(todayWord)
+    
 
     #User should get 6 guesses to guess
+    guessNum = 1
+    while guessNum <= 6:
+        validWord = False
+        while validWord == False:
+            guess = input("Enter guess: ")
+            guess = guess.lower()
+            if guess not in wordList:
+                print("Invalid word.")
+                validWord = False
+            else:
+                validWord = True
+        feedback = rateGuess(guess, todayWord)
+        print(feedback)
+        if feedback ==todayWord.upper():
+            print("You got it in", guessNum, "tries!")
+            break
+        guessNum = guessNum + 1
 
-    #Ask user for their guess
-    #Give feedback using on their word:
-
+    print("The word was: ", todayWord)
 
 
 
